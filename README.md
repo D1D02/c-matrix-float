@@ -1,7 +1,7 @@
 # **Matrix Float C Library**
 
-A simple c float library to create and manipulate matrices, with functions that are intended to be used on 
-microcontroller ( but it is not excluded to be used in other ways ). 
+A simple C float library to create and manipulate matrices, with functions that are intended to be used on 
+microcontroller (but it is not excluded to be used in other ways). 
 
 I'm a computer science student and I'm developing this to help me in my project, but I want to maintain this 
 library as long is necessary: so feel free, to issue and propose or to report errors.
@@ -15,14 +15,19 @@ library as long is necessary: so feel free, to issue and propose or to report er
 
 ## Testing
 
-For testing purpose, you can find an example.c file where you can test the library: you will find examples for commands. If you are on linux, you can just use this command to build the code:
+For testing purpose, you can find an example.c file where you can test the library: you will find examples for commands. 
+Make sure you have installed CMake on your platform. 
+To build this project, create a build directory and move into it:
 ```
-make
+cd build
 ```
-And for running the example code, after launching the make command, you just need to send this command:
+Then, prompt the following commands:
 ```
-./example
+cmake ..
+cmake --build .
 ```
+Finally, find the example.exe in your build directory and run it (the position of the example executable depends 
+on your operating system).
 
 
 ## Functions 
@@ -30,13 +35,24 @@ And for running the example code, after launching the make command, you just nee
 In this section you will find all the functions that are implemented on the branch main, with a small explanation.
 
 ### Creation
-- **create_empty_float_matrix**, a function that create a matrix from 2 unsigned short int, rows and columns, and return a zero matrix_float (a matrix_float initialized with all zeros)
-- **create_example_matrix**, a function that create a matrix from a 1 unsigned short int, representing rank, and return a matrix_float with incremental value starting from the first cell
-- **create_identity_matrix**, a function that takes a number, rank, and create a squared matrix with 1 on diagonal
+- **create_matrix**: creates a matrix with the specified numbers of rows, columns and elements.
+- **create_identity_matrix**: creates an identity matrix of the specified order.
+> [!WARNING]
+> All matrices should be destroyed with **destroy_matrix**.
+
 
 ### Operations
-- **sum_matrices**, a function that takes two not null matrices with same dimensions, same number of rows and cols, and return a matrix_float that is the sum of the 2 matrices
-- **product_matrices**, a function that takes in input 2 not null matrices, with cols of the first matrix equal to the rows of the second, and return a matrix_float that is the multiplication of the 2 matrices
+- **add_matrices**: takes 2 not null matrices with same dimensions, same number of rows and cols, and returns a matrix that is the sum of the 2 matrices
+- **multiply_matrices**: takes 2 not null matrices, with number of columns of the first matrix equal to the number of rows of the second one, and returns a matrix_float that is the product of the 2 matrices
 
 ### Utility
-- **print_matrix**, when given in input NULL pointer goes to segmentation fault. RESOLUTION: added a check of non NULL pointer at the beginning of the function
+- **print_matrix**: prints the specified matrix.
+
+## TO-DO
+- Implement other operations (subtraction, product for a scalar, transpose, etc.).
+- Implement operations on raw pointers rather than on matrix objects (to improve performance).
+
+## Releases
+- v0.2: (francespos's contribution) Code refactoring. Matrices elements are stored in a single rather than a double 
+pointer to improve performance (memory allocated contiguously). Matrices are passed by value rather than by reference (again, to improve performance, because matrix objects are very small). Using CMake instead of Makefile (for portability).
+- v0.1: Original Release  
