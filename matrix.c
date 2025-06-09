@@ -9,39 +9,30 @@ static unsigned short int _min( unsigned short int num1, unsigned short int num2
    else return num1;
 }
 
+static int _fab( float num )
+{
+   if( num < 0.0f )
+      return -num;
+   else
+      return num;
+   
+}
 
 /* <-------------------------------------------------------- Matrix Creation --------------------------------------------------------> */
 matrix_float* create_empty_float_matrix( unsigned short int rows, unsigned short int cols )
 {
    
+   float ** p_matrix = create_simple_float_matrix( rows, cols );
+   
+   if( p_matrix == NULL )
+      return NULL;
+   
    matrix_float * matrix = ( matrix_float * ) malloc ( sizeof( matrix_float ) );
-   float ** p_matrix = ( float ** ) malloc( rows * sizeof( float * ) );
-   
-   
-   if( p_matrix == NULL || matrix == NULL )
-   	return NULL;
-   
-   
-   for( unsigned short int i = 0; i < rows; i++ )
+  
+   if( matrix == NULL )
    {
-   	
-   	p_matrix[i] = ( float * ) malloc( cols * sizeof( float * ) );
-   	
-   	if( p_matrix[i] == NULL )
-   	{
-   	   
-   	   for( unsigned short int k = 0; k < i; k++ ) 
-   	   {
-   	
-   	      free( p_matrix[k] );
-   	
-   	   }   
-   	   
-   	   free( p_matrix );
-   	   return NULL;
-	
-	}
-   
+      free_simple_float_matrix( p_matrix, rows ); 
+      return NULL;
    }
    
    matrix->p_matrix = p_matrix;
@@ -163,6 +154,123 @@ matrix_float* transpose_matrix( matrix_float * matrix )
 
 }
 
+matrix_float* inverse_matrix( matrix_float * matrix )
+{
+
+   if( matrix == NULL || matrix->p_matrix == NULL || !( matrix->cols == matrix->rows ) )
+   	return NULL;
+   
+   
+   float** augmented_matrix = create_simple_float_matrix( matrix->rows, 2 * matrix->cols );
+   
+
+   for( unsigned short int i = 0; i < matrix->rows; i++ )
+   {
+   
+      for( unsigned short int j = 0; j < matrix->cols * 2; j++ )
+      {
+      
+         if( j < matrix->cols )
+         {
+            augmented_matrix[i][j] = matrix->p_matrix[i][j];
+         }
+         else if( ( j - matrix->cols ) == i )
+         {
+            augmented_matrix[i][j] = 1 ;
+         }
+         
+      }
+      
+   }
+   
+   
+   for( unsigned short int i = 0; i < matrix->rows; i++ )
+   {
+   
+      unsigned short int pivot_row = i;
+      
+      for( unsigned short int k = i + 1; k < matrix->rows; k++ )
+      {
+      
+         if( _fab( augmented_matrix[k][i] ) > _fab( augmented_matrix[pivot_row][i] ) )
+         {
+            pivot_row = k;
+         }
+         
+      }
+      
+      if ( _fab( augmented_matrix[pivot_row][i] ) < EPSILON ) {
+         printf("Singular Matrix.");
+         free_simple_float_matrix( augmented_matrix, matrix->rows );
+         return NULL;
+      }
+
+      if (pivot_row != i) 
+      {
+         for ( unsigned short int j = 0; j < 2 * matrix->cols; j++ ) 
+         {
+         
+            float tmp = augmented_matrix[i][j];
+            augmented_matrix[i][j] = augmented_matrix[pivot_row][j];
+            augmented_matrix[pivot_row][j] = tmp;
+            
+         }
+      }
+
+
+      float pivot = augmented_matrix[i][i];
+      
+      for ( unsigned short int j = 0; j < 2 * matrix->cols; j++ ) 
+      {
+      
+         augmented_matrix[i][j] /= pivot;
+         
+      }
+
+
+      for ( unsigned short int row = 0; row < matrix->rows; row++ ) 
+      {
+      
+         if (row != i)
+         {
+            float factor = augmented_matrix[row][i];
+            
+            for ( unsigned short int col = 0; col < 2 * matrix->cols; col++ ) 
+            { 
+            
+               augmented_matrix[row][col] -= factor * augmented_matrix[i][col];
+               
+            }
+            
+         }
+         
+      }
+      
+   }
+   
+   
+   matrix_float* inverse = create_empty_float_matrix( matrix->rows, matrix->rows ); 
+   
+   if( inverse == NULL || inverse->p_matrix == NULL )
+   	return NULL;
+   
+   
+   for (unsigned short int i = 0; i < matrix->rows; i++) 
+   {
+   
+        for (unsigned short int j = 0; j < matrix->cols; j++) 
+        {
+        
+            inverse->p_matrix[i][j] = augmented_matrix[i][j + matrix->cols];
+            
+        }
+        
+    }
+    
+    return inverse;
+    
+}
+
 /* <---------------------------------------------------- Matrix Operations Implementation----------------------------------------------------> */
 void insert_example_matrix_elements( matrix_float * matrix, unsigned short int row, unsigned short int col )
 {
@@ -213,12 +321,62 @@ void sum_matrices_elements( float * result_cell, const matrix_float * matrix1, c
 void print_matrix( matrix_float * matrix )
 {
 
-   if( matrix == NULL )
+   if( matrix == NULL || matrix->p_matrix == NULL )
+   {
+      printf( "Matrix is null.\r\n" );
       return;
+   }
 
    basic_double_loop_matrix( matrix, print_matrix_elements );
 
    printf("\r\n");
+   
+}
+
+float** create_simple_float_matrix( unsigned short int rows, unsigned short int cols )
+{
+   float ** p_matrix = ( float ** ) malloc( rows * sizeof( float * ) );
+   
+   
+   if( p_matrix == NULL )
+   	return NULL;
+   
+   
+   for( unsigned short int i = 0; i < rows; i++ )
+   {
+   	
+   	p_matrix[i] = ( float * ) malloc( cols * sizeof( float ) );
+   	
+   	if( p_matrix[i] == NULL )
+   	{
+   	   
+   	   for( unsigned short int k = 0; k < i; k++ ) 
+   	   {
+   	
+   	      free( p_matrix[k] );
+   	
+   	   }   
+   	   
+   	   free( p_matrix );
+   	   return NULL;
+	
+	}
+   }
+   
+   return p_matrix;
+}
+
+void free_simple_float_matrix( float ** matrix, unsigned short int rows)
+{
+
+   for( unsigned short int i = 0; i < rows; i++ )
+   {
+
+      free( matrix[i] );
+
+   }
+
+   free( matrix );
    
 }
 
