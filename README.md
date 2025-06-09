@@ -30,13 +30,18 @@ And for running the example code, after launching the make command, you just nee
 In this section you will find all the functions that are implemented on the branch main, with a small explanation.
 
 ### Creation
-- **create_empty_float_matrix**, a function that create a matrix from 2 unsigned short int, rows and columns, and return a zero matrix_float (a matrix_float initialized with all zeros)
-- **create_example_matrix**, a function that create a matrix from a 1 unsigned short int, representing rank, and return a matrix_float with incremental value starting from the first cell
-- **create_identity_matrix**, a function that takes a number, rank, and create a squared matrix with 1 on diagonal
+- **create_empty_float_matrix**, a function that create a matrix from 2 unsigned short int, rows and columns, and return a zero matrix_float (a matrix_float initialized with all zeros).
+- **create_example_matrix**, a function that create a matrix from a 1 unsigned short int, representing rank, and return a matrix_float with incremental value starting from the first cell.
+- **create_identity_matrix**, a function that takes a number, rank, and create a squared matrix with 1 on diagonal.
 
 ### Operations
-- **sum_matrices**, a function that takes two not null matrices with same dimensions, same number of rows and cols, and return a matrix_float that is the sum of the 2 matrices
-- **product_matrices**, a function that takes in input 2 not null matrices, with cols of the first matrix equal to the rows of the second, and return a matrix_float that is the multiplication of the 2 matrices
+- **inverse_matrix**, a function that takes a not null matrix_float with same dimensions, same number of rows and cols, and return a matrix_float that is the inverse of the given matrix.
+- **sum_matrices**, a function that takes two not null matrix_float with same dimensions, same number of rows and cols, and return a matrix_float that is the sum of the 2 matrices.
+- **product_matrices**, a function that takes in input 2 not null matrix_float, with cols of the first matrix equal to the rows of the second, and return a matrix_float that is the multiplication of the 2 matrices.
+- **transpose_matrix**, a function that takes a not null matrix_float and return a matrix_float that is the transpose of the given matrix.
+
 
 ### Utility
-- **print_matrix**, when given in input NULL pointer goes to segmentation fault. RESOLUTION: added a check of non NULL pointer at the beginning of the function
+- **print_matrix**, a function that takes in input a not null matrix_float and print it on the standart output.
+- **create_simple_float_matrix**, a function that takes in input 2 numbers, rows and columns, and return a simple float matrix.
+- **create_simple_float_matrix**, a function that takes in input a simple float matrix and deallocate the memory.
