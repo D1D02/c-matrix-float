@@ -49,6 +49,9 @@ int main(){
    print_matrix( matrix_invertible_inverse );
    print_matrix( product_matrices( matrix_invertible, matrix_invertible_inverse ) );
    
+   printf(" Sum and Difference between matrix1 and matrix2.\r\n" );
+   print_matrix( sum_matrices( matrix1, matrix2 ) );
+   print_matrix( difference_matrices( matrix1, matrix2 ) );
    
    free_matrix_float( matrix0 );
    free_matrix_float( matrix1 );
