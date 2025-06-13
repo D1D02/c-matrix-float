@@ -50,7 +50,16 @@ int main(){
    print_matrix( product_matrices( matrix_invertible, matrix_invertible_inverse ) );
    
    
+   free_matrix_float( matrix0 );
+   free_matrix_float( matrix1 );
+   free_matrix_float( matrix1_transpose );
+   free_matrix_float( matrix2 );
+   free_matrix_float( matrix3 );
+   free_matrix_float( matrix4 );
    
+   
+   free_matrix_float( matrix_invertible );
+   free_matrix_float( matrix_invertible_inverse );
   
    return 0; 
 }
