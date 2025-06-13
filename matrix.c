@@ -84,6 +84,13 @@ matrix_float* create_identity_matrix( unsigned short int rank )
 
 
 /* <-------------------------------------------------------- Matrices Operations --------------------------------------------------------> */
+matrix_float* difference_matrices( matrix_float * matrix1, matrix_float * matrix2 )
+{
+  
+   return sum_difference_matrices( matrix1, matrix2, difference_matrices_elements );
+   
+}
+
 matrix_float* product_matrices( matrix_float * matrix1, matrix_float * matrix2 )
 {
    if( matrix1 == NULL || matrix2 == NULL )
@@ -111,23 +118,8 @@ matrix_float* product_matrices( matrix_float * matrix1, matrix_float * matrix2 )
 
 matrix_float* sum_matrices( matrix_float * matrix1, matrix_float * matrix2 )
 {
-
-   if( matrix1 == NULL || matrix2 == NULL )
-   	return NULL;
-   
-   if( !( ( matrix1->rows == matrix2->rows ) && ( matrix1->cols == matrix2->cols ) ) )
-   	return NULL;
-   
-   
-   matrix_float* matrix = create_empty_float_matrix( matrix1->rows, matrix1->cols ); 
-   
-   if( matrix == NULL )
-   	return NULL;
-   
-   basic_double_loop_matrices( matrix, ( const matrix_float * ) matrix1, ( const matrix_float * ) matrix2, sum_matrices_elements );
-   
-   
-   return matrix;
+  
+   return sum_difference_matrices( matrix1, matrix2, sum_matrices_elements );
    
 }
 
@@ -274,6 +266,13 @@ matrix_float* inverse_matrix( matrix_float * matrix )
 
 
 /* <---------------------------------------------------- Matrix Operations Implementation----------------------------------------------------> */
+void difference_matrices_elements( float * result_cell, const matrix_float * matrix1, const matrix_float * matrix2, unsigned short int row, unsigned short int col )
+{
+
+   *result_cell = matrix1->p_matrix[row][col] - matrix2->p_matrix[row][col];
+   
+}
+
 void insert_example_matrix_elements( matrix_float * matrix, unsigned short int row, unsigned short int col )
 {
 
@@ -311,6 +310,27 @@ void product_matrices_elements( float * result_cell, const matrix_float * matrix
    
 }
 
+matrix_float* sum_difference_matrices( matrix_float * matrix1, matrix_float * matrix2, MatricesBasicOperation operation )
+{
+
+   if( matrix1 == NULL || matrix2 == NULL )
+   	return NULL;
+   
+   if( !( ( matrix1->rows == matrix2->rows ) && ( matrix1->cols == matrix2->cols ) ) )
+   	return NULL;
+   
+   
+   matrix_float* matrix = create_empty_float_matrix( matrix1->rows, matrix1->cols ); 
+   
+   if( matrix == NULL )
+   	return NULL;
+   
+   basic_double_loop_matrices( matrix, ( const matrix_float * ) matrix1, ( const matrix_float * ) matrix2, operation );
+   
+   
+   return matrix;
+   
+}
 void sum_matrices_elements( float * result_cell, const matrix_float * matrix1, const matrix_float * matrix2, unsigned short int row, unsigned short int col )
 {
 

@@ -23,17 +23,20 @@ matrix_float* create_example_matrix( unsigned short int );
 matrix_float* create_identity_matrix( unsigned short ints );
 
 /* <-------------------------------------------------------- Matrix Operations --------------------------------------------------------> */
+matrix_float* difference_matrices( matrix_float *, matrix_float * );
 matrix_float* product_matrices( matrix_float *, matrix_float * );
 matrix_float* sum_matrices( matrix_float *, matrix_float * );
 matrix_float* transpose_matrix( matrix_float * );
 matrix_float* inverse_matrix( matrix_float * );
 
 /* <-------------------------------------------------------- Matrix Operations Implementation --------------------------------------------------------> */
+void difference_matrices_elements( float *, const matrix_float *, const matrix_float *, unsigned short int , unsigned short int );
 void insert_example_matrix_elements( matrix_float *, unsigned short int , unsigned short int );
 void insert_zero_matrix_elements( matrix_float *, unsigned short int, unsigned short int );
 void print_matrix_elements( matrix_float *, unsigned short int, unsigned short int );
 void product_matrices_elements( float *, const matrix_float *, const matrix_float *, unsigned short int, unsigned short int );
 void sum_matrices_elements( float *, const matrix_float *, const matrix_float *, unsigned short int, unsigned short int );
+matrix_float* sum_difference_matrices( matrix_float *, matrix_float *, MatricesBasicOperation );
 
 /* <-------------------------------------------------------- Utility --------------------------------------------------------> */
 void print_matrix( matrix_float * );
