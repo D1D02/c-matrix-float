@@ -39,6 +39,7 @@ void sum_matrices_elements( float *, const matrix_float *, const matrix_float *,
 void print_matrix( matrix_float * );
 float** create_simple_float_matrix( unsigned short int, unsigned short int );
 void free_simple_float_matrix( float ** matrix, unsigned short int rows);
+void free_matrix_float( matrix_float * );
 
 /* <-------------------------------------------------------- Matrix Loop Functions --------------------------------------------------------> */
 void basic_double_loop_matrices( matrix_float *, const matrix_float *, const matrix_float *, MatricesBasicOperation );

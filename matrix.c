@@ -18,6 +18,7 @@ static int _fab( float num )
    
 }
 
+
 /* <-------------------------------------------------------- Matrix Creation --------------------------------------------------------> */
 matrix_float* create_empty_float_matrix( unsigned short int rows, unsigned short int cols )
 {
@@ -271,6 +272,7 @@ matrix_float* inverse_matrix( matrix_float * matrix )
     
 }
 
+
 /* <---------------------------------------------------- Matrix Operations Implementation----------------------------------------------------> */
 void insert_example_matrix_elements( matrix_float * matrix, unsigned short int row, unsigned short int col )
 {
@@ -318,21 +320,6 @@ void sum_matrices_elements( float * result_cell, const matrix_float * matrix1, c
 
 
 /* <-------------------------------------------------------- Utility --------------------------------------------------------> */
-void print_matrix( matrix_float * matrix )
-{
-
-   if( matrix == NULL || matrix->p_matrix == NULL )
-   {
-      printf( "Matrix is null.\r\n" );
-      return;
-   }
-
-   basic_double_loop_matrix( matrix, print_matrix_elements );
-
-   printf("\r\n");
-   
-}
-
 float** create_simple_float_matrix( unsigned short int rows, unsigned short int cols )
 {
    float ** p_matrix = ( float ** ) malloc( rows * sizeof( float * ) );
@@ -377,6 +364,30 @@ void free_simple_float_matrix( float ** matrix, unsigned short int rows)
    }
 
    free( matrix );
+   
+}
+
+void free_matrix_float( matrix_float * matrix )
+{
+
+   free_simple_float_matrix( matrix->p_matrix, matrix->rows );
+   
+   free( matrix );
+
+}
+
+void print_matrix( matrix_float * matrix )
+{
+
+   if( matrix == NULL || matrix->p_matrix == NULL )
+   {
+      printf( "Matrix is null.\r\n" );
+      return;
+   }
+
+   basic_double_loop_matrix( matrix, print_matrix_elements );
+
+   printf("\r\n");
    
 }
 
