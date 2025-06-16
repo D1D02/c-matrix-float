@@ -20,6 +20,11 @@ int main(){
    //Transpose
    matrix_float* matrix1_transpose = transpose_matrix( matrix1 );
    
+   matrix_float * matrix5 = create_empty_float_matrix( 2, 3 );
+   matrix5->p_matrix[0][0] = 1;
+   matrix5->p_matrix[1][2] = 1;
+   matrix_float* matrix5_transpose = transpose_matrix( matrix5 );
+   
    //Inverse
    matrix_float* matrix_invertible = create_empty_float_matrix( 2, 2 );
    matrix_invertible->p_matrix[0][0] = 2;
@@ -44,6 +49,12 @@ int main(){
    print_matrix( matrix1 );
    print_matrix( matrix1_transpose );
    
+   
+   printf( "Matrix5 with transpose.\r\n" );
+   print_matrix( matrix5 );
+   print_matrix( matrix5_transpose );
+   
+   
    printf( "Invertible Matrix with inverse.\r\n" );
    print_matrix( matrix_invertible );
    print_matrix( matrix_invertible_inverse );
@@ -59,6 +70,8 @@ int main(){
    free_matrix_float( matrix2 );
    free_matrix_float( matrix3 );
    free_matrix_float( matrix4 );
+   free_matrix_float( matrix5 );
+   free_matrix_float( matrix5_transpose );
    
    
    free_matrix_float( matrix_invertible );

@@ -131,10 +131,10 @@ matrix_float* transpose_matrix( matrix_float * matrix )
    if( transpose == NULL )
    	return NULL;
 
-   for( int i = 0; i < matrix->rows; i++ )
+   for( int i = 0; i < transpose->rows; i++ )
    {
    
-      for( int j = 0; j < matrix-> cols; j++ )
+      for( int j = 0; j < transpose->cols; j++ )
       {
       
          transpose->p_matrix[i][j] = matrix->p_matrix[j][i];
