@@ -37,11 +37,11 @@ matrix_float* create_empty_float_matrix( unsigned short int rows, unsigned short
    }
    
    matrix->p_matrix = p_matrix;
-   
-   basic_double_loop_matrix( matrix, insert_zero_matrix_elements );
-   
    matrix->rows = rows;
    matrix->cols = cols;
+   
+   basic_double_loop_matrix( matrix, insert_zero_matrix_elements );
+
    
    return matrix;
 
@@ -100,11 +100,7 @@ matrix_float* product_matrices( matrix_float * matrix1, matrix_float * matrix2 )
       return NULL;
    
    
-   unsigned short int rows = _min( matrix1->rows, matrix2->rows );
-   unsigned short int cols = _min( matrix1->cols, matrix2->cols );
-   
-   
-   matrix_float* matrix = create_empty_float_matrix( rows, cols );   
+   matrix_float* matrix = create_empty_float_matrix( matrix1->rows, matrix2->cols );   
    
    if( matrix == NULL )
    	return NULL;
@@ -131,10 +127,10 @@ matrix_float* transpose_matrix( matrix_float * matrix )
    if( transpose == NULL )
    	return NULL;
 
-   for( int i = 0; i < matrix->rows; i++ )
+   for( int i = 0; i < transpose->rows; i++ )
    {
    
-      for( int j = 0; j < matrix-> cols; j++ )
+      for( int j = 0; j < transpose->cols; j++ )
       {
       
          transpose->p_matrix[i][j] = matrix->p_matrix[j][i];
@@ -375,10 +371,15 @@ float** create_simple_float_matrix( unsigned short int rows, unsigned short int 
 
 void free_simple_float_matrix( float ** matrix, unsigned short int rows)
 {
-
+   if( matrix == NULL )
+      return;
+      
    for( unsigned short int i = 0; i < rows; i++ )
    {
-
+      
+      if( matrix[i] == NULL )
+         break;
+      
       free( matrix[i] );
 
    }
@@ -389,6 +390,8 @@ void free_simple_float_matrix( float ** matrix, unsigned short int rows)
 
 void free_matrix_float( matrix_float * matrix )
 {
+   if( matrix == NULL )
+      return;
 
    free_simple_float_matrix( matrix->p_matrix, matrix->rows );
    
