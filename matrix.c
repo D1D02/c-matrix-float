@@ -37,11 +37,11 @@ matrix_float* create_empty_float_matrix( unsigned short int rows, unsigned short
    }
    
    matrix->p_matrix = p_matrix;
-   
-   basic_double_loop_matrix( matrix, insert_zero_matrix_elements );
-   
    matrix->rows = rows;
    matrix->cols = cols;
+   
+   basic_double_loop_matrix( matrix, insert_zero_matrix_elements );
+
    
    return matrix;
 
