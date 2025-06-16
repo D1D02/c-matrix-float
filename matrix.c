@@ -375,10 +375,15 @@ float** create_simple_float_matrix( unsigned short int rows, unsigned short int 
 
 void free_simple_float_matrix( float ** matrix, unsigned short int rows)
 {
-
+   if( matrix == NULL )
+      return;
+      
    for( unsigned short int i = 0; i < rows; i++ )
    {
-
+      
+      if( matrix[i] == NULL )
+         break;
+      
       free( matrix[i] );
 
    }
@@ -389,6 +394,8 @@ void free_simple_float_matrix( float ** matrix, unsigned short int rows)
 
 void free_matrix_float( matrix_float * matrix )
 {
+   if( matrix == NULL )
+      return;
 
    free_simple_float_matrix( matrix->p_matrix, matrix->rows );
    
