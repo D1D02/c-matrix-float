@@ -100,11 +100,7 @@ matrix_float* product_matrices( matrix_float * matrix1, matrix_float * matrix2 )
       return NULL;
    
    
-   unsigned short int rows = _min( matrix1->rows, matrix2->rows );
-   unsigned short int cols = _min( matrix1->cols, matrix2->cols );
-   
-   
-   matrix_float* matrix = create_empty_float_matrix( rows, cols );   
+   matrix_float* matrix = create_empty_float_matrix( matrix1->rows, matrix2->cols );   
    
    if( matrix == NULL )
    	return NULL;
