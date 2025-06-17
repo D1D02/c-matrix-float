@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#define EPSILON 0.000000001
+#define EPSILON 1e-9
 
 typedef struct MatrixFloatStruct{
    unsigned short int rows;

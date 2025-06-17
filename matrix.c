@@ -2,15 +2,9 @@
 
 
 /* <-------------------------------------------------------- Local Functions --------------------------------------------------------> */
-static unsigned short int _min( unsigned short int num1, unsigned short int num2 )
+static float _fab( float num )
 {
-   if( num1 < num2 ) return num1;
-   if( num2 < num1 ) return num2;
-   else return num1;
-}
 
-static int _fab( float num )
-{
    if( num < 0.0f )
       return -num;
    else
