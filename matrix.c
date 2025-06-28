@@ -2,6 +2,7 @@
 
 
 /* <-------------------------------------------------------- Local Functions --------------------------------------------------------> */
+//Function that returns the absolute value of a float
 static float _fab( float num )
 {
 
@@ -14,10 +15,11 @@ static float _fab( float num )
 
 
 /* <-------------------------------------------------------- Matrix Creation --------------------------------------------------------> */
+//Starting from the number of rows and columns, return an empty matrix_float
 matrix_float* create_empty_float_matrix( unsigned short int rows, unsigned short int cols )
 {
    
-   float ** p_matrix = create_simple_float_matrix( rows, cols );
+   float ** p_matrix = create_simple_float_matrix( rows, cols ); //Call the function that create a simple double pointer float matrix
    
    if( p_matrix == NULL )
       return NULL;
@@ -26,7 +28,7 @@ matrix_float* create_empty_float_matrix( unsigned short int rows, unsigned short
   
    if( matrix == NULL )
    {
-      free_simple_float_matrix( p_matrix, rows ); 
+      free_simple_float_matrix( p_matrix, rows ); //If the matrix_float is not correctly allocated, free memory and return
       return NULL;
    }
    
@@ -34,41 +36,43 @@ matrix_float* create_empty_float_matrix( unsigned short int rows, unsigned short
    matrix->rows = rows;
    matrix->cols = cols;
    
-   basic_double_loop_matrix( matrix, insert_zero_matrix_elements );
+   basic_double_loop_matrix( matrix, insert_zero_matrix_elements ); //Insert 0 in to the matrix
 
    
    return matrix;
 
 }
 
+//Create a squared matrix with numbers of the cell corrisponding to an incremental index ( this is used to debug / for testing purpose )
 matrix_float* create_example_matrix( unsigned short int rank )
 {
 
-   matrix_float* matrix = create_empty_float_matrix( rank, rank );
+   matrix_float* matrix = create_empty_float_matrix( rank, rank ); //Create and empty matrix_float
    
    if( matrix == NULL)
       return NULL;
    
    
-   basic_double_loop_matrix( matrix, insert_example_matrix_elements );
+   basic_double_loop_matrix( matrix, insert_example_matrix_elements ); //Insert indexed values into the matrix
    
    
    return matrix;
    
 }
 
+//Create a matrix_float with 1 on the main diagonal
 matrix_float* create_identity_matrix( unsigned short int rank )
 {
-   matrix_float* matrix = create_empty_float_matrix( rank, rank );
+   matrix_float* matrix = create_empty_float_matrix( rank, rank ); //Create an empty matrix_float
    
    if( matrix == NULL )
       return NULL;
       
-      
-   for( int i = 0; i < rank; i++ )
+   //Inserting 1 on the main diagonal
+   for( unsigned short int i = 0; i < rank; i++ )
    {
    
-      matrix->p_matrix[i][i] = 1;
+      matrix->p_matrix[i][i] = 1; 
    
    }
    
@@ -78,6 +82,7 @@ matrix_float* create_identity_matrix( unsigned short int rank )
 
 
 /* <-------------------------------------------------------- Matrices Operations --------------------------------------------------------> */
+//Function that takes in two matrix_float and return their difference
 matrix_float* difference_matrices( matrix_float * matrix1, matrix_float * matrix2 )
 {
   
@@ -85,6 +90,7 @@ matrix_float* difference_matrices( matrix_float * matrix1, matrix_float * matrix
    
 }
 
+//Function that takes in two matrix_float and return their product
 matrix_float* product_matrices( matrix_float * matrix1, matrix_float * matrix2 )
 {
    if( matrix1 == NULL || matrix2 == NULL )
@@ -106,6 +112,7 @@ matrix_float* product_matrices( matrix_float * matrix1, matrix_float * matrix2 )
       
 }  
 
+//Function that takes in two matrix_float and return their sum
 matrix_float* sum_matrices( matrix_float * matrix1, matrix_float * matrix2 )
 {
   
@@ -113,6 +120,7 @@ matrix_float* sum_matrices( matrix_float * matrix1, matrix_float * matrix2 )
    
 }
 
+//Function that takes in a matrix_float and return the transpose
 matrix_float* transpose_matrix( matrix_float * matrix )
 {
    
@@ -121,10 +129,10 @@ matrix_float* transpose_matrix( matrix_float * matrix )
    if( transpose == NULL )
    	return NULL;
 
-   for( int i = 0; i < transpose->rows; i++ )
+   for( unsigned short int i = 0; i < transpose->rows; i++ )
    {
    
-      for( int j = 0; j < transpose->cols; j++ )
+      for( unsigned short int j = 0; j < transpose->cols; j++ )
       {
       
          transpose->p_matrix[i][j] = matrix->p_matrix[j][i];
@@ -137,6 +145,7 @@ matrix_float* transpose_matrix( matrix_float * matrix )
 
 }
 
+//Function that takes in a matrix_float and return the inverse
 matrix_float* inverse_matrix( matrix_float * matrix )
 {
 
@@ -150,7 +159,7 @@ matrix_float* inverse_matrix( matrix_float * matrix )
    for( unsigned short int i = 0; i < matrix->rows; i++ )
    {
    
-      for( unsigned short int j = 0; j < matrix->cols * 2; j++ )
+      for( unsigned int j = 0; j < matrix->cols * 2; j++ )
       {
       
          if( j < matrix->cols )
@@ -190,7 +199,7 @@ matrix_float* inverse_matrix( matrix_float * matrix )
 
       if (pivot_row != i) 
       {
-         for ( unsigned short int j = 0; j < 2 * matrix->cols; j++ ) 
+         for ( unsigned int j = 0; j < 2 * matrix->cols; j++ ) 
          {
          
             float tmp = augmented_matrix[i][j];
@@ -203,7 +212,7 @@ matrix_float* inverse_matrix( matrix_float * matrix )
 
       float pivot = augmented_matrix[i][i];
       
-      for ( unsigned short int j = 0; j < 2 * matrix->cols; j++ ) 
+      for ( unsigned int j = 0; j < 2 * matrix->cols; j++ ) 
       {
       
          augmented_matrix[i][j] /= pivot;
@@ -218,7 +227,7 @@ matrix_float* inverse_matrix( matrix_float * matrix )
          {
             float factor = augmented_matrix[row][i];
             
-            for ( unsigned short int col = 0; col < 2 * matrix->cols; col++ ) 
+            for ( unsigned int col = 0; col < 2 * matrix->cols; col++ ) 
             { 
             
                augmented_matrix[row][col] -= factor * augmented_matrix[i][col];
@@ -256,6 +265,7 @@ matrix_float* inverse_matrix( matrix_float * matrix )
 
 
 /* <---------------------------------------------------- Matrix Operations Implementation----------------------------------------------------> */
+//Operation that take in a cell of a matrix and substract the two cells of the two matrix_float in input
 void difference_matrices_elements( float * result_cell, const matrix_float * matrix1, const matrix_float * matrix2, unsigned short int row, unsigned short int col )
 {
 
@@ -263,6 +273,7 @@ void difference_matrices_elements( float * result_cell, const matrix_float * mat
    
 }
 
+//Operation that take in a cell of a matrix and insert the index of the correspondent cell of the example matrix
 void insert_example_matrix_elements( matrix_float * matrix, unsigned short int row, unsigned short int col )
 {
 
@@ -270,7 +281,7 @@ void insert_example_matrix_elements( matrix_float * matrix, unsigned short int r
    
 }
 
-
+//Operation that take in a matrix_float and insert zero in the corrispondent cell
 void insert_zero_matrix_elements( matrix_float * matrix, unsigned short int row, unsigned short int col )
 {
 
@@ -278,6 +289,7 @@ void insert_zero_matrix_elements( matrix_float * matrix, unsigned short int row,
    
 }
 
+//Operation that take in a matrix_float and print the corrispondent cell
 void print_matrix_elements( matrix_float * matrix, unsigned short int row, unsigned short int col )
 {
 
@@ -288,6 +300,7 @@ void print_matrix_elements( matrix_float * matrix, unsigned short int row, unsig
    	
 }
 
+//Operation that take in a cell of a matrix and product the two cells of the two matrix_float in input
 void product_matrices_elements( float * result_cell, const matrix_float * matrix1, const matrix_float * matrix2, unsigned short int row, unsigned short int col )
 {
    
@@ -300,6 +313,7 @@ void product_matrices_elements( float * result_cell, const matrix_float * matrix
    
 }
 
+//Function that takes in input two matrix_float and apply the function sum/difference
 matrix_float* sum_difference_matrices( matrix_float * matrix1, matrix_float * matrix2, MatricesBasicOperation operation )
 {
 
@@ -315,12 +329,14 @@ matrix_float* sum_difference_matrices( matrix_float * matrix1, matrix_float * ma
    if( matrix == NULL )
    	return NULL;
    
-   basic_double_loop_matrices( matrix, ( const matrix_float * ) matrix1, ( const matrix_float * ) matrix2, operation );
+   basic_double_loop_matrices( matrix, ( const matrix_float * ) matrix1, ( const matrix_float * ) matrix2, operation ); //Operation applied to cells using the basic double loop function ( a function that navigates through the matrix )
    
    
    return matrix;
    
 }
+
+//Operation that take in a cell of a matrix and sum the two cells of the two matrix_float in input
 void sum_matrices_elements( float * result_cell, const matrix_float * matrix1, const matrix_float * matrix2, unsigned short int row, unsigned short int col )
 {
 
@@ -330,6 +346,7 @@ void sum_matrices_elements( float * result_cell, const matrix_float * matrix1, c
 
 
 /* <-------------------------------------------------------- Utility --------------------------------------------------------> */
+//Function that takes in input the number of rows and columns, and returns a double pointer float matrix
 float** create_simple_float_matrix( unsigned short int rows, unsigned short int cols )
 {
    float ** p_matrix = ( float ** ) malloc( rows * sizeof( float * ) );
@@ -363,6 +380,7 @@ float** create_simple_float_matrix( unsigned short int rows, unsigned short int 
    return p_matrix;
 }
 
+//Function that takes in input double pointer float matrix and rows number, and free the memory
 void free_simple_float_matrix( float ** matrix, unsigned short int rows)
 {
    if( matrix == NULL )
@@ -382,17 +400,19 @@ void free_simple_float_matrix( float ** matrix, unsigned short int rows)
    
 }
 
+//Function that takes in input a matrix_float and free the memory
 void free_matrix_float( matrix_float * matrix )
 {
    if( matrix == NULL )
       return;
 
-   free_simple_float_matrix( matrix->p_matrix, matrix->rows );
+   free_simple_float_matrix( matrix->p_matrix, matrix->rows ); //In first place, we free the simple float matrix
    
-   free( matrix );
+   free( matrix ); //Then, we can free the matrix_float
 
 }
 
+//Function that takes in input a matrix_float and print the matrix_float
 void print_matrix( matrix_float * matrix )
 {
 
@@ -410,13 +430,14 @@ void print_matrix( matrix_float * matrix )
 
 
 /* <-------------------------------------------------------- Matrix Loop Functions --------------------------------------------------------> */
+//Function that takes in input an output matrix_float and two input matrix_float and apply the operation
 void basic_double_loop_matrices( matrix_float * result, const matrix_float * matrix1, const matrix_float * matrix2, MatricesBasicOperation operation )
 {
 
-   for( int i = 0; i < result->rows; i++ )
+   for( unsigned short int i = 0; i < result->rows; i++ )
    {
    
-      for( int j = 0; j < result->cols; j++ )
+      for( unsigned short int j = 0; j < result->cols; j++ )
       {
       
          operation( &result->p_matrix[i][j], ( const matrix_float * ) matrix1, ( const matrix_float * ) matrix2, i, j);
@@ -427,13 +448,14 @@ void basic_double_loop_matrices( matrix_float * result, const matrix_float * mat
 
 }
 
+//Function that takes in input a matrix_float and apply the operation
 void basic_double_loop_matrix( matrix_float * matrix, MatrixBasicOperation operation )
 {
 
-   for( int i = 0; i < matrix->rows; i++ )
+   for( unsigned short int i = 0; i < matrix->rows; i++ )
    {
    
-      for( int j = 0; j < matrix->cols; j++ )
+      for( unsigned short int j = 0; j < matrix->cols; j++ )
       {
       
          operation( matrix, i, j );
