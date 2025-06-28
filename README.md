@@ -1,10 +1,8 @@
 # **Matrix Float C Library**
 
-A simple c float library to create and manipulate matrices, with functions that are intended to be used on 
-microcontroller ( but it is not excluded to be used in other ways ). 
+A simple c float library to create and manipulate matrices, with functions that are intended to be used on microcontroller ( but it is not excluded to be used in other ways ). 
 
-I'm a computer science student and I'm developing this to help me in my project, but I want to maintain this 
-library as long is necessary: so feel free, to issue and propose or to report errors.
+I'm a computer science student and I'm developing this to help me in my project, but I want to maintain this library as long is necessary: so feel free, to issue and propose or to report errors.
 
 > [!NOTE]
 > This is a student project and is maintained only by the creator himself.
@@ -36,7 +34,7 @@ In this section you will find all the functions that are implemented on the bran
 
 ### Operations
 - **difference_matrices**, a function that takes two not null matrix_float with same dimensions, same number of rows and cols, and return a matrix_float that is the difference of the 2 matrices.
-- **inverse_matrix**, a function that takes a not null matrix_float with same dimensions, same number of rows and cols, and return a matrix_float that is the inverse of the given matrix.
+- **inverse_matrix**, a function that takes a not null matrix_float with same dimensions, same number of rows and cols, and return a matrix_float that is the inverse of the given matrix.  (Gauss-Jordan)
 - **sum_matrices**, a function that takes two not null matrix_float with same dimensions, same number of rows and cols, and return a matrix_float that is the sum of the 2 matrices.
 - **product_matrices**, a function that takes in input 2 not null matrix_float, with cols of the first matrix equal to the rows of the second, and return a matrix_float that is the multiplication of the 2 matrices.
 - **transpose_matrix**, a function that takes a not null matrix_float and return a matrix_float that is the transpose of the given matrix.
