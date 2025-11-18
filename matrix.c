@@ -19,7 +19,7 @@ static float _fab( float num )
 matrix_float* create_empty_float_matrix( unsigned short int rows, unsigned short int cols )
 {
    
-   float ** p_matrix = create_simple_float_matrix( rows, cols ); //Call the function that create a simple double pointer float matrix
+   float * p_matrix = create_simple_float_matrix( rows, cols ); //Call the function that create a simple double pointer float matrix
    
    if( p_matrix == NULL )
       return NULL;
@@ -28,7 +28,7 @@ matrix_float* create_empty_float_matrix( unsigned short int rows, unsigned short
   
    if( matrix == NULL )
    {
-      free_simple_float_matrix( p_matrix, rows ); //If the matrix_float is not correctly allocated, free memory and return
+      free_simple_float_matrix( p_matrix ); //If the matrix_float is not correctly allocated, free memory and return
       return NULL;
    }
    
@@ -72,7 +72,7 @@ matrix_float* create_identity_matrix( unsigned short int rank )
    for( unsigned short int i = 0; i < rank; i++ )
    {
    
-      matrix->p_matrix[i][i] = 1; 
+      GET_ELEMENT( matrix, i, i ) = 1;
    
    }
    
@@ -135,7 +135,7 @@ matrix_float* transpose_matrix( matrix_float * matrix )
       for( unsigned short int j = 0; j < transpose->cols; j++ )
       {
       
-         transpose->p_matrix[i][j] = matrix->p_matrix[j][i];
+         GET_ELEMENT( transpose, i, j ) = GET_ELEMENT( matrix, j, i );
       
       }
    
@@ -153,8 +153,10 @@ matrix_float* inverse_matrix( matrix_float * matrix )
    	return NULL;
    
    
-   float** augmented_matrix = create_simple_float_matrix( matrix->rows, 2 * matrix->cols );
+   float* augmented_matrix = create_simple_float_matrix( matrix->rows, 2 * matrix->cols );
    
+   if( augmented_matrix == NULL )
+      return NULL;
 
    for( unsigned short int i = 0; i < matrix->rows; i++ )
    {
@@ -164,11 +166,15 @@ matrix_float* inverse_matrix( matrix_float * matrix )
       
          if( j < matrix->cols )
          {
-            augmented_matrix[i][j] = matrix->p_matrix[i][j];
+            augmented_matrix[i * (2 * matrix->cols) + j] = GET_ELEMENT( matrix, i, j );
          }
          else if( ( j - matrix->cols ) == i )
          {
-            augmented_matrix[i][j] = 1 ;
+            augmented_matrix[i * (2 * matrix->cols) + j] = 1;
+         }
+         else
+         {
+            augmented_matrix[i * (2 * matrix->cols) + j] = 0;
          }
          
       }
@@ -184,16 +190,16 @@ matrix_float* inverse_matrix( matrix_float * matrix )
       for( unsigned short int k = i + 1; k < matrix->rows; k++ )
       {
       
-         if( _fab( augmented_matrix[k][i] ) > _fab( augmented_matrix[pivot_row][i] ) )
+         if( _fab( augmented_matrix[k * (2 * matrix->cols) + i] ) > _fab( augmented_matrix[pivot_row * (2 * matrix->cols) + i] ) )
          {
             pivot_row = k;
          }
          
       }
       
-      if ( _fab( augmented_matrix[pivot_row][i] ) < EPSILON ) {
+      if ( _fab( augmented_matrix[pivot_row * (2 * matrix->cols) + i] ) < EPSILON ) {
          printf("Singular Matrix.");
-         free_simple_float_matrix( augmented_matrix, matrix->rows );
+         free_simple_float_matrix( augmented_matrix );
          return NULL;
       }
 
@@ -202,20 +208,20 @@ matrix_float* inverse_matrix( matrix_float * matrix )
          for ( unsigned int j = 0; j < 2 * matrix->cols; j++ ) 
          {
          
-            float tmp = augmented_matrix[i][j];
-            augmented_matrix[i][j] = augmented_matrix[pivot_row][j];
-            augmented_matrix[pivot_row][j] = tmp;
+            float tmp = augmented_matrix[i * (2 * matrix->cols) + j];
+            augmented_matrix[i * (2 * matrix->cols) + j] = augmented_matrix[pivot_row * (2 * matrix->cols) + j];
+            augmented_matrix[pivot_row * (2 * matrix->cols) + j] = tmp;
             
          }
       }
 
 
-      float pivot = augmented_matrix[i][i];
+      float pivot = augmented_matrix[i * (2 * matrix->cols) + i];
       
       for ( unsigned int j = 0; j < 2 * matrix->cols; j++ ) 
       {
       
-         augmented_matrix[i][j] /= pivot;
+         augmented_matrix[i * (2 * matrix->cols) + j] /= pivot;
          
       }
 
@@ -225,12 +231,12 @@ matrix_float* inverse_matrix( matrix_float * matrix )
       
          if (row != i)
          {
-            float factor = augmented_matrix[row][i];
+            float factor = augmented_matrix[row * (2 * matrix->cols) + i];
             
             for ( unsigned int col = 0; col < 2 * matrix->cols; col++ ) 
             { 
-            
-               augmented_matrix[row][col] -= factor * augmented_matrix[i][col];
+               
+               augmented_matrix[row * (2 * matrix->cols) + col] -= factor * augmented_matrix[i * (2 * matrix->cols) + col];
                
             }
             
@@ -244,7 +250,10 @@ matrix_float* inverse_matrix( matrix_float * matrix )
    matrix_float* inverse = create_empty_float_matrix( matrix->rows, matrix->rows ); 
    
    if( inverse == NULL || inverse->p_matrix == NULL )
-   	return NULL;
+   {
+      free_simple_float_matrix( augmented_matrix );
+      return NULL;
+   }
    
    
    for (unsigned short int i = 0; i < matrix->rows; i++) 
@@ -253,11 +262,13 @@ matrix_float* inverse_matrix( matrix_float * matrix )
         for (unsigned short int j = 0; j < matrix->cols; j++) 
         {
         
-            inverse->p_matrix[i][j] = augmented_matrix[i][j + matrix->cols];
+            GET_ELEMENT( inverse, i, j ) = augmented_matrix[i * (2 * matrix->cols) + (j + matrix->cols)];
             
         }
         
     }
+    
+    free_simple_float_matrix( augmented_matrix );
     
     return inverse;
     
@@ -269,7 +280,7 @@ matrix_float* inverse_matrix( matrix_float * matrix )
 void difference_matrices_elements( float * result_cell, const matrix_float * matrix1, const matrix_float * matrix2, unsigned short int row, unsigned short int col )
 {
 
-   *result_cell = matrix1->p_matrix[row][col] - matrix2->p_matrix[row][col];
+   *result_cell = GET_ELEMENT( matrix1, row, col ) - GET_ELEMENT( matrix2, row, col );
    
 }
 
@@ -277,7 +288,7 @@ void difference_matrices_elements( float * result_cell, const matrix_float * mat
 void insert_example_matrix_elements( matrix_float * matrix, unsigned short int row, unsigned short int col )
 {
 
-   matrix->p_matrix[row][col] = ( row * matrix->cols ) + ( col + 1 );
+   GET_ELEMENT( matrix, row, col ) = ( row * matrix->cols ) + ( col + 1 );
    
 }
 
@@ -285,7 +296,7 @@ void insert_example_matrix_elements( matrix_float * matrix, unsigned short int r
 void insert_zero_matrix_elements( matrix_float * matrix, unsigned short int row, unsigned short int col )
 {
 
-   matrix->p_matrix[row][col] = 0;
+   GET_ELEMENT( matrix, row, col ) = 0;
    
 }
 
@@ -293,7 +304,7 @@ void insert_zero_matrix_elements( matrix_float * matrix, unsigned short int row,
 void print_matrix_elements( matrix_float * matrix, unsigned short int row, unsigned short int col )
 {
 
-   printf( "%f ", matrix->p_matrix[row][col] );
+   printf( "%f ", GET_ELEMENT( matrix, row, col ) );
    
    if( col == matrix->cols - 1 )
    	printf( "\r\n" );
@@ -307,7 +318,7 @@ void product_matrices_elements( float * result_cell, const matrix_float * matrix
    for( unsigned short int k = 0; k < matrix1->cols ; k++ )
    {
          
-      *result_cell += matrix1->p_matrix[row][k] * matrix2->p_matrix[k][col];
+      *result_cell += GET_ELEMENT( matrix1, row, k ) * GET_ELEMENT( matrix2, k, col );
         
    }
    
@@ -340,63 +351,30 @@ matrix_float* sum_difference_matrices( matrix_float * matrix1, matrix_float * ma
 void sum_matrices_elements( float * result_cell, const matrix_float * matrix1, const matrix_float * matrix2, unsigned short int row, unsigned short int col )
 {
 
-   *result_cell = matrix1->p_matrix[row][col] + matrix2->p_matrix[row][col];
+   *result_cell = GET_ELEMENT( matrix1, row, col ) + GET_ELEMENT( matrix2, row, col );
    
 }
 
 
 /* <-------------------------------------------------------- Utility --------------------------------------------------------> */
-//Function that takes in input the number of rows and columns, and returns a double pointer float matrix
-float** create_simple_float_matrix( unsigned short int rows, unsigned short int cols )
+//Function that takes in input the number of rows and columns, and returns a single pointer float matrix (contigous allocation)
+float* create_simple_float_matrix( unsigned short int rows, unsigned short int cols )
 {
-   float ** p_matrix = ( float ** ) malloc( rows * sizeof( float * ) );
-   
-   
-   if( p_matrix == NULL )
-   	return NULL;
-   
-   
-   for( unsigned short int i = 0; i < rows; i++ )
-   {
-   	
-   	p_matrix[i] = ( float * ) malloc( cols * sizeof( float ) );
-   	
-   	if( p_matrix[i] == NULL )
-   	{
-   	   
-   	   for( unsigned short int k = 0; k < i; k++ ) 
-   	   {
-   	
-   	      free( p_matrix[k] );
-   	
-   	   }   
-   	   
-   	   free( p_matrix );
-   	   return NULL;
-	
-	}
-   }
-   
+
+   float * p_matrix = ( float * ) malloc( rows * cols * sizeof( float ) );
    return p_matrix;
+
 }
 
-//Function that takes in input double pointer float matrix and rows number, and free the memory
-void free_simple_float_matrix( float ** matrix, unsigned short int rows)
+//Function that takes in input single pointer float matrix and rows number, and free the memory
+void free_simple_float_matrix( float * matrix )
 {
    if( matrix == NULL )
       return;
-      
-   for( unsigned short int i = 0; i < rows; i++ )
-   {
-      
-      if( matrix[i] == NULL )
-         break;
-      
-      free( matrix[i] );
-
-   }
 
    free( matrix );
+
+   matrix = NULL;
    
 }
 
@@ -406,9 +384,10 @@ void free_matrix_float( matrix_float * matrix )
    if( matrix == NULL )
       return;
 
-   free_simple_float_matrix( matrix->p_matrix, matrix->rows ); //In first place, we free the simple float matrix
+   free_simple_float_matrix( matrix->p_matrix ); //In first place, we free the simple float matrix
    
    free( matrix ); //Then, we can free the matrix_float
+   matrix = NULL;
 
 }
 
@@ -440,7 +419,7 @@ void basic_double_loop_matrices( matrix_float * result, const matrix_float * mat
       for( unsigned short int j = 0; j < result->cols; j++ )
       {
       
-         operation( &result->p_matrix[i][j], ( const matrix_float * ) matrix1, ( const matrix_float * ) matrix2, i, j);
+         operation( &GET_ELEMENT(result, i, j), ( const matrix_float * ) matrix1, ( const matrix_float * ) matrix2, i, j);
       
       }
    
