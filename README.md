@@ -1,6 +1,6 @@
 # **Matrix Float C Library**
 
-A simple c float library to create and manipulate matrices, with functions that are intended to be used on microcontroller ( but it is not excluded to be used in other ways ). 
+A simple c float library to create and manipulate matrices, with functions that are intended to be used on low end device ( but it is not excluded to be used in other ways ). 
 
 I'm a computer science student and I'm developing this to help me in my project, but I want to maintain this library as long is necessary: so feel free, to issue and propose or to report errors.
 
