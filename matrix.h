@@ -6,11 +6,14 @@
 
 #define EPSILON 1e-9
 
+#define GET_ELEMENT(m, r, c) ((m)->p_matrix[ (r) * (m)->cols + (c) ])
+
 typedef struct MatrixFloatStruct{
    unsigned short int rows;
    unsigned short int cols;
-   float** p_matrix;
+   float * p_matrix;
 }matrix_float;
+
 
 
 typedef void ( *MatrixBasicOperation ) ( matrix_float *, unsigned short int , unsigned short int );
@@ -40,8 +43,8 @@ matrix_float* sum_difference_matrices( matrix_float *, matrix_float *, MatricesB
 
 /* <-------------------------------------------------------- Utility --------------------------------------------------------> */
 void print_matrix( matrix_float * );
-float** create_simple_float_matrix( unsigned short int, unsigned short int );
-void free_simple_float_matrix( float ** matrix, unsigned short int rows);
+float* create_simple_float_matrix( unsigned short int, unsigned short int );
+void free_simple_float_matrix( float * );
 void free_matrix_float( matrix_float * );
 
 /* <-------------------------------------------------------- Matrix Loop Functions --------------------------------------------------------> */

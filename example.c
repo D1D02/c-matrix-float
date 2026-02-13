@@ -21,16 +21,16 @@ int main(){
    matrix_float* matrix1_transpose = transpose_matrix( matrix1 );
    
    matrix_float * matrix5 = create_empty_float_matrix( 2, 3 );
-   matrix5->p_matrix[0][0] = 1;
-   matrix5->p_matrix[1][2] = 1;
+   GET_ELEMENT( matrix5, 0, 0 ) = 1;
+   GET_ELEMENT( matrix5, 1, 2 ) = 1;
    matrix_float* matrix5_transpose = transpose_matrix( matrix5 );
    
    //Inverse
    matrix_float* matrix_invertible = create_empty_float_matrix( 2, 2 );
-   matrix_invertible->p_matrix[0][0] = 2;
-   matrix_invertible->p_matrix[0][1] = 7;
-   matrix_invertible->p_matrix[1][0] = 2;
-   matrix_invertible->p_matrix[1][1] = 8;
+   GET_ELEMENT( matrix_invertible, 0, 0 ) = 2;
+   GET_ELEMENT( matrix_invertible, 0, 1 ) = 7;
+   GET_ELEMENT( matrix_invertible, 1, 0 ) = 2;
+   GET_ELEMENT( matrix_invertible, 1, 1 ) = 8;
    matrix_float* matrix_invertible_inverse = inverse_matrix( matrix_invertible );
   
   
