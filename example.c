@@ -7,31 +7,31 @@ int main(){
    printf(" Matrix Example.\n\r");
    
    //Creation empty matrix
-   matrix_float* matrix0 = create_empty_float_matrix( 3, 2 );
+   matrix* matrix0 = create_empty_matrix( 3, 2 );
    
    //Creation examples
-   matrix_float* matrix1 = create_example_matrix( 3 );
-   matrix_float* matrix2 = create_identity_matrix( 3 );
+   matrix* matrix1 = create_example_matrix( 3 );
+   matrix* matrix2 = create_identity_matrix( 3 );
   
    //Sum and product
-   matrix_float* matrix3 = sum_matrices( matrix1, matrix2 );
-   matrix_float* matrix4 = product_matrices( matrix1, matrix1 );
+   matrix* matrix3 = sum_matrices( matrix1, matrix2 );
+   matrix* matrix4 = product_matrices( matrix1, matrix1 );
    
    //Transpose
-   matrix_float* matrix1_transpose = transpose_matrix( matrix1 );
+   matrix* matrix1_transpose = transpose_matrix( matrix1 );
    
-   matrix_float * matrix5 = create_empty_float_matrix( 2, 3 );
+   matrix * matrix5 = create_empty_matrix( 2, 3 );
    GET_ELEMENT( matrix5, 0, 0 ) = 1;
    GET_ELEMENT( matrix5, 1, 2 ) = 1;
-   matrix_float* matrix5_transpose = transpose_matrix( matrix5 );
+   matrix* matrix5_transpose = transpose_matrix( matrix5 );
    
    //Inverse
-   matrix_float* matrix_invertible = create_empty_float_matrix( 2, 2 );
+   matrix* matrix_invertible = create_empty_matrix( 2, 2 );
    GET_ELEMENT( matrix_invertible, 0, 0 ) = 2;
    GET_ELEMENT( matrix_invertible, 0, 1 ) = 7;
    GET_ELEMENT( matrix_invertible, 1, 0 ) = 2;
    GET_ELEMENT( matrix_invertible, 1, 1 ) = 8;
-   matrix_float* matrix_invertible_inverse = inverse_matrix( matrix_invertible );
+   matrix* matrix_invertible_inverse = inverse_matrix( matrix_invertible );
   
   
    printf( "Empty matrixx.\r\n" );
@@ -64,18 +64,18 @@ int main(){
    print_matrix( sum_matrices( matrix1, matrix2 ) );
    print_matrix( difference_matrices( matrix1, matrix2 ) );
    
-   free_matrix_float( matrix0 );
-   free_matrix_float( matrix1 );
-   free_matrix_float( matrix1_transpose );
-   free_matrix_float( matrix2 );
-   free_matrix_float( matrix3 );
-   free_matrix_float( matrix4 );
-   free_matrix_float( matrix5 );
-   free_matrix_float( matrix5_transpose );
+   free_matrix( matrix0 );
+   free_matrix( matrix1 );
+   free_matrix( matrix1_transpose );
+   free_matrix( matrix2 );
+   free_matrix( matrix3 );
+   free_matrix( matrix4 );
+   free_matrix( matrix5 );
+   free_matrix( matrix5_transpose );
    
    
-   free_matrix_float( matrix_invertible );
-   free_matrix_float( matrix_invertible_inverse );
+   free_matrix( matrix_invertible );
+   free_matrix( matrix_invertible_inverse );
   
    return 0; 
 }

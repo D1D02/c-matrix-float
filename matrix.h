@@ -8,47 +8,49 @@
 
 #define GET_ELEMENT(m, r, c) ((m)->p_matrix[ (r) * (m)->cols + (c) ])
 
+typedef float matrix_type;
+
 typedef struct MatrixFloatStruct{
    unsigned short int rows;
    unsigned short int cols;
-   float * p_matrix;
-}matrix_float;
+   matrix_type * p_matrix;
+}matrix;
 
 
 
-typedef void ( *MatrixBasicOperation ) ( matrix_float *, unsigned short int , unsigned short int );
-typedef void ( *MatricesBasicOperation ) ( float *, const matrix_float *, const matrix_float *, unsigned short int , unsigned short int );
+typedef void ( *MatrixBasicOperation ) ( matrix *, unsigned short int , unsigned short int );
+typedef void ( *MatricesBasicOperation ) ( matrix_type *, const matrix *, const matrix *, unsigned short int , unsigned short int );
 
 
 /* <-------------------------------------------------------- Matrix Creation --------------------------------------------------------> */
-matrix_float* create_empty_float_matrix( unsigned short int rows, unsigned short int cols );
-matrix_float* create_example_matrix( unsigned short int );
-matrix_float* create_identity_matrix( unsigned short ints );
+matrix* create_empty_matrix( unsigned short int rows, unsigned short int cols );
+matrix* create_example_matrix( unsigned short int );
+matrix* create_identity_matrix( unsigned short ints );
 
 /* <-------------------------------------------------------- Matrix Operations --------------------------------------------------------> */
-matrix_float* difference_matrices( matrix_float *, matrix_float * );
-matrix_float* product_matrices( matrix_float *, matrix_float * );
-matrix_float* sum_matrices( matrix_float *, matrix_float * );
-matrix_float* transpose_matrix( matrix_float * );
-matrix_float* inverse_matrix( matrix_float * );
+matrix* difference_matrices( matrix *, matrix * );
+matrix* product_matrices( matrix *, matrix * );
+matrix* sum_matrices( matrix *, matrix * );
+matrix* transpose_matrix( matrix * );
+matrix* inverse_matrix( matrix * );
 
 /* <-------------------------------------------------------- Matrix Operations Implementation --------------------------------------------------------> */
-void difference_matrices_elements( float *, const matrix_float *, const matrix_float *, unsigned short int , unsigned short int );
-void insert_example_matrix_elements( matrix_float *, unsigned short int , unsigned short int );
-void insert_zero_matrix_elements( matrix_float *, unsigned short int, unsigned short int );
-void print_matrix_elements( matrix_float *, unsigned short int, unsigned short int );
-void product_matrices_elements( float *, const matrix_float *, const matrix_float *, unsigned short int, unsigned short int );
-void sum_matrices_elements( float *, const matrix_float *, const matrix_float *, unsigned short int, unsigned short int );
-matrix_float* sum_difference_matrices( matrix_float *, matrix_float *, MatricesBasicOperation );
+void difference_matrices_elements( matrix_type *, const matrix *, const matrix *, unsigned short int , unsigned short int );
+void insert_example_matrix_elements( matrix *, unsigned short int , unsigned short int );
+void insert_zero_matrix_elements( matrix *, unsigned short int, unsigned short int );
+void print_matrix_elements( matrix *, unsigned short int, unsigned short int );
+void product_matrices_elements( matrix_type *, const matrix *, const matrix *, unsigned short int, unsigned short int );
+void sum_matrices_elements( matrix_type *, const matrix *, const matrix *, unsigned short int, unsigned short int );
+matrix* sum_difference_matrices( matrix *, matrix *, MatricesBasicOperation );
 
 /* <-------------------------------------------------------- Utility --------------------------------------------------------> */
-void print_matrix( matrix_float * );
-float* create_simple_float_matrix( unsigned short int, unsigned short int );
-void free_simple_float_matrix( float * );
-void free_matrix_float( matrix_float * );
+void print_matrix( matrix * );
+float* create_simple_matrix( unsigned short int, unsigned short int );
+void free_simple_matrix( matrix_type * );
+void free_matrix( matrix * );
 
 /* <-------------------------------------------------------- Matrix Loop Functions --------------------------------------------------------> */
-void basic_double_loop_matrices( matrix_float *, const matrix_float *, const matrix_float *, MatricesBasicOperation );
-void basic_double_loop_matrix( matrix_float *, MatrixBasicOperation );
+void basic_double_loop_matrices( matrix *, const matrix *, const matrix *, MatricesBasicOperation );
+void basic_double_loop_matrix( matrix *, MatrixBasicOperation );
 
 #endif
